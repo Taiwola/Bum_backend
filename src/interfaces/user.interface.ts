@@ -5,6 +5,7 @@ export interface UserInterface {
     avatarUrl: string,
     email: string,
     role: RoleEnum,
+    password: string,
 }
 
 

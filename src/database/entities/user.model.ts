@@ -18,6 +18,9 @@ export class User {
     @Column({type: "enum", enum: RoleEnum, default: RoleEnum.SUBACCOUNT_USER})
     role: RoleEnum
 
+    @Column({type:"varchar", nullable: false})
+    password: string;
+
     @CreateDateColumn({
         type: "timestamp",
         default: () => "CURRENT_TIMESTAMP",
