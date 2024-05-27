@@ -1,0 +1,25 @@
+{
+  "name": "bum-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "compile": "tsc && node ./dist/main.js",
+    "dev": "nodemon -e ts --exec \"npm run compile\""
+  },
+  "author": "seun olanitori",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/pg": "^8.11.6",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "pg": "^8.11.5",
+    "typeorm": "^0.3.20"
+  }
+}
