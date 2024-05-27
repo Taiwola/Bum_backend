@@ -4,8 +4,16 @@ import { Request, Response } from "express";
 import { generateJwt } from "../config/token";
 import { UserInterface } from "../interfaces/user.interface";
 
+// import validator
+import {registerValidator, loginValidator} from "../util/validator/authValidator"
+
 
 export const registerUser = async (req: Request, res: Response) => {
+    const {error, value} = registerValidator.validate(req.body, { abortEarly: false });
+    if (error) {
+        const errorMessages = error.details.map(detail => detail.message);
+        return res.status(400).json({ errors: errorMessages });
+      }
     const dataBody: UserInterface = req.body;
 
     // check if email exist
@@ -31,6 +39,11 @@ export const registerUser = async (req: Request, res: Response) => {
 }
 
 export const loginUser = async (req:Request, res: Response) => {
+    const {error, value} = loginValidator.validate(req.body, {abortEarly: false});
+    if (error) {
+        const errorMessages = error.details.map(detail => detail.message);
+        return res.status(400).json({ errors: errorMessages });
+      }
     const {email, password} = req.body;
 
     // check if user exist
@@ -43,15 +56,20 @@ export const loginUser = async (req:Request, res: Response) => {
 
     if (!pwd) return res.status(400).json({message: "invalid credentials"});
 
-    const accessToken = await generateJwt(email, userExist.id);
-    req.session.id = userExist.id;
+    try {
+        const accessToken = await generateJwt(email, userExist.id);
+    req.session.user_id = userExist.id;
     req.session.email = email;
 
     return res.status(200).json({
         message: "you have sucessfully logged in",
         accessToken,
         id: userExist.id
-    })
+    })   
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({message: "internal server error"});
+    }
 }
 
 export const logUserOut = async (req:Request, res:Response) => {

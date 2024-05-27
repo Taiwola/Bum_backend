@@ -5,6 +5,10 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 
+
+// import routes
+import {authRouter} from "./routes/auth.route";
+
 const PORT  =  process.env.PORT || 4000;
 const app = express();
 
@@ -25,6 +29,10 @@ app.use(session({
 app.use(cookieParser());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
+
+
+// use route
+app.use('/api/auth', authRouter);
 
 
 

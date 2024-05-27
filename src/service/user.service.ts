@@ -7,9 +7,11 @@ const userRepository = connectionSource.getRepository(User);
 
 
 export const create_user = async (userInput: UserInterface): Promise<User> => {
-    const user = await userRepository.create({
+    const user = userRepository.create({
         ...userInput
     });
+
+    await userRepository.save(user);
 
     return user;
 };
