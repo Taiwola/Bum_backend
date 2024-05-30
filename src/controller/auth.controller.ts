@@ -57,7 +57,7 @@ export const loginUser = async (req:Request, res: Response) => {
     if (!pwd) return res.status(400).json({message: "invalid credentials"});
 
     try {
-        const accessToken = await generateJwt(email, userExist.id);
+    const accessToken = await generateJwt(email, userExist.id);
     req.session.user_id = userExist.id;
     req.session.email = email;
 

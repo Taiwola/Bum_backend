@@ -9,7 +9,7 @@ export const registerValidator = Joi.object({
     name: Joi.string().min(3).max(30).required().messages(nameMessages),
     email: Joi.string().email().required().messages(emailMessages),
     password: Joi.string().min(6).required().messages(passwordMessages),
-    avatarUrl: Joi.string().uri().required().messages(avatarUrlMessages),
+    avatarUrl: Joi.string().uri().optional().messages(avatarUrlMessages),
   });
 
 

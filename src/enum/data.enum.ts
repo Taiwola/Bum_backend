@@ -5,7 +5,7 @@ export enum RoleEnum  {
     "SUBACCOUNT_GUEST" = 'SUBACCOUNT_GUEST'
 }
 
-export enum IconEnum {
+export enum Icon {
     "settings" = "settings",
     "chart" = "chart",
     "calendar" = "calendar",
@@ -36,4 +36,19 @@ export enum IconEnum {
     "category" = "category",
     "contact" = "contact", 
     "clipboardIcon" = "clipboardIcon" 
+  }
+
+
+  export enum InvitationStatus {
+    ACCEPTED = 'ACCEPTED',
+    REVOKED = 'REVOKED',
+    PENDING = 'PENDING',
+  }
+
+  export enum TriggerTypes {
+    CONTACT_FORM = 'CONTACT_FORM',
+  }
+  
+  export enum ActionType {
+    CREATE_CONTACT = 'CREATE_CONTACT',
   }
