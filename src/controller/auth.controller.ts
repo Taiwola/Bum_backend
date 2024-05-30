@@ -1,4 +1,4 @@
-import {create_user, get_one_by_email} from "../service";
+import {create_user, get_one_by_email, verifyIfUserHasInvitation} from "../service";
 import * as bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { generateJwt } from "../config/token";
@@ -6,37 +6,58 @@ import { UserInterface } from "../interfaces/user.interface";
 
 // import validator
 import {registerValidator, loginValidator} from "../util/validator/authValidator"
+import { createNotification } from "../service/notification.service";
 
 
-export const registerUser = async (req: Request, res: Response) => {
-    const {error, value} = registerValidator.validate(req.body, { abortEarly: false });
-    if (error) {
-        const errorMessages = error.details.map(detail => detail.message);
-        return res.status(400).json({ errors: errorMessages });
-      }
-    const dataBody: UserInterface = req.body;
-
-    // check if email exist
-    const userExist = await get_one_by_email(dataBody.email);
-
-    if (userExist) return res.status(409).json({message: 'This email is already in use'});
-
+export const registerUserController = async (req: Request, res: Response) => {
     try {
-        // hash the password
-        const hashPwd = await bcrypt.hash(dataBody.password, 10);
-
-        const dataOption: UserInterface = {
-            ...dataBody, password: hashPwd
+        const { error, value } = registerValidator.validate(req.body, { abortEarly: false });
+        if (error) {
+            const errorMessages = error.details.map(detail => detail.message);
+            return res.status(400).json({ errors: errorMessages });
         }
 
-        const user = await create_user(dataOption);
+        const dataBody: UserInterface = req.body;
 
-        return res.status(200).json({message: "User Created"});
+        const invitationExist = await verifyIfUserHasInvitation(dataBody.email);
+        if (invitationExist) {
+            const hashPwd = await bcrypt.hash(dataBody.password, 10);
+            const dataOption: UserInterface = {
+                ...dataBody,
+                password: hashPwd,
+                agencyId: invitationExist.agencyId,
+                agency: invitationExist.agency,
+                role: invitationExist.role
+            };
+
+            const newUser = await create_user(dataOption);
+
+            const message = `${newUser.name} joined`;
+            const agencyId = invitationExist.agencyId;
+            const subAccountId = newUser.id;
+
+            await createNotification(message, agencyId, subAccountId);
+            return res.status(200).json({ message: 'Invited user joined' });
+        }
+
+        const userExist = await get_one_by_email(dataBody.email);
+        if (userExist) {
+            return res.status(409).json({ message: 'This email is already in use' });
+        }
+
+        const hashPwd = await bcrypt.hash(dataBody.password, 10);
+        const dataOption: UserInterface = {
+            ...dataBody,
+            password: hashPwd
+        };
+
+        const newUser = await create_user(dataOption);
+        return res.status(200).json({ message: 'User created' });
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({message: "internal server error"});
+        console.error('Error during user registration:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-}
+};
 
 export const loginUser = async (req:Request, res: Response) => {
     const {error, value} = loginValidator.validate(req.body, {abortEarly: false});

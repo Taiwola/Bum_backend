@@ -52,3 +52,8 @@ export enum Icon {
   export enum ActionType {
     CREATE_CONTACT = 'CREATE_CONTACT',
   }
+
+  export enum Plan {
+    price_1OYxkqFj9oKEERu1NbKUxXxN = 'price_1OYxkqFj9oKEERu1NbKUxXxN',
+    price_1OYxkqFj9oKEERu1KfJGWxgN = 'price_1OYxkqFj9oKEERu1KfJGWxgN',
+  }

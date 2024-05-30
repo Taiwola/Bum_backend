@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "./entities/user.model";
+import * as Entities from "./entities/user.model";
 dotenv.config(); // Load environment variables from a .env file
 
 export const connectionSource = new DataSource({
@@ -13,7 +13,7 @@ export const connectionSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true, // In development, you can set this to false
   logging: false,
-  entities: [User],
+  entities: Object.values(Entities),
   migrations: [], // Configure migrations if needed
   subscribers: [], // Configure subscribers if needed
   migrationsTableName: "custom_migration_table",

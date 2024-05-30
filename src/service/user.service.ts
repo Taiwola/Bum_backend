@@ -6,6 +6,7 @@ import { DeleteResult, UpdateResult } from 'typeorm';
 const userRepository = connectionSource.getRepository(User);
 
 
+
 export const create_user = async (userInput: UserInterface): Promise<User> => {
     const user = userRepository.create({
         ...userInput
@@ -17,18 +18,22 @@ export const create_user = async (userInput: UserInterface): Promise<User> => {
 };
 
 export const get_all_user = async (): Promise<User[]> => {
-    const users = await userRepository.find();
+    const users = await userRepository.find({
+        relations: [
+            'agency', 'permissions', 'tickets', 'notifications'
+        ]
+    });
     return users;
 }
 
 export const get_one_user = async (userId: string): Promise<User> => {
-    const user = await userRepository.findOneBy({ id: userId });
+    const user = await userRepository.findOne({ where: {id: userId}, relations: ['agency', 'permissions', 'tickets', 'notifications'] });
     return user;
 };
 
 
 export const get_one_by_email = async (userEmail: string): Promise<User> => {
-    const user = await userRepository.findOneBy({ email: userEmail });
+    const user = await userRepository.findOne({ where: {email: userEmail}, relations: ['agency', 'permissions', 'tickets', 'notifications'] });
     return user;
 }
 
@@ -44,3 +49,5 @@ export const delete_user = async (userId: string): Promise<DeleteResult> => {
     const user = await userRepository.delete({id: userId});
     return user;
 }
+
+

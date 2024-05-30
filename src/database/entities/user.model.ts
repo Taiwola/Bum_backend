@@ -12,29 +12,27 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { RoleEnum, ActionType, Icon, InvitationStatus, TriggerTypes } from '../../enum/data.enum';
+import { RoleEnum, ActionType, Icon, InvitationStatus, TriggerTypes, Plan } from '../../enum/data.enum';
 
 
 
 
 
-export enum Plan {
-  price_1OYxkqFj9oKEERu1NbKUxXxN = 'price_1OYxkqFj9oKEERu1NbKUxXxN',
-  price_1OYxkqFj9oKEERu1KfJGWxgN = 'price_1OYxkqFj9oKEERu1KfJGWxgN',
-}
+
 
 @Entity()
+@Index('agencyIndex', ['agencyId'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
-  @Column('text')
+  @Column({type: "text", nullable: true})
   avatarUrl: string;
 
-  @Column({ unique: true })
+  @Column({type:"varchar", unique: true })
   email: string;
 
   @CreateDateColumn()
@@ -49,7 +47,7 @@ export class User {
   @Column({type: 'varchar'})
   password: string;
 
-  @Column({ nullable: true })
+  @Column({type:"varchar", nullable: true })
   agencyId: string;
 
   @ManyToOne(() => Agency, (agency) => agency.users, { onDelete: 'CASCADE' })
@@ -63,9 +61,6 @@ export class User {
 
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];
-
-  @Index()
-  agencyIndex: string;
 }
 
 @Entity()
@@ -74,26 +69,20 @@ export class Permissions {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   email: string;
 
   @ManyToOne(() => User, (user) => user.permissions, { onDelete: 'CASCADE' })
   user: User;
 
-  @Column()
+  @Column({type: "varchar"})
   subAccountId: string;
 
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.permissions, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
 
-  @Column()
+  @Column({type: 'boolean'})
   access: boolean;
-
-  @Index()
-  subAccountIndex: string;
-
-  @Index()
-  emailIndex: string;
 }
 
 @Entity()
@@ -101,40 +90,40 @@ export class Agency {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ default: '' })
+  @Column({ type: "varchar", default: '' })
   connectAccountId: string;
 
-  @Column({ default: '' })
+  @Column({type:"varchar" ,default: '' })
   customerId: string;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
-  @Column('text')
+  @Column({type: "text"})
   agencyLogo: string;
 
-  @Column('text')
+  @Column({type: "text"})
   companyEmail: string;
 
-  @Column()
+  @Column({type: "varchar"})
   companyPhone: string;
 
-  @Column({ default: true })
+  @Column({type: 'boolean' , default: true })
   whiteLabel: boolean;
 
-  @Column()
+  @Column({type: "varchar"})
   address: string;
 
-  @Column()
+  @Column({type: "varchar"})
   city: string;
 
-  @Column()
+  @Column({type: "varchar"})
   zipCode: string;
 
-  @Column()
+  @Column({type: "varchar"})
   state: string;
 
-  @Column()
+  @Column({type: "varchar"})
   country: string;
 
   @Column({ default: 5 })
@@ -175,10 +164,10 @@ export class SubAccount {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ default: '' })
+  @Column({type: 'varchar', default: '' })
   connectAccountId: string;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
   @Column('text')
@@ -193,28 +182,28 @@ export class SubAccount {
   @Column('text')
   companyEmail: string;
 
-  @Column()
+  @Column({type: "varchar"})
   companyPhone: string;
 
   @Column({ default: 5 })
   goal: number;
 
-  @Column()
+  @Column({type: "text"})
   address: string;
 
-  @Column()
+  @Column({type: "varchar"})
   city: string;
 
-  @Column()
+  @Column({type: "varchar"})
   zipCode: string;
 
-  @Column()
+  @Column({type: "varchar"})
   state: string;
 
-  @Column()
+  @Column({type: "varchar"})
   country: string;
 
-  @Column()
+  @Column({type: "varchar"})
   agencyId: string;
 
   @ManyToOne(() => Agency, (agency) => agency.subAccounts, { onDelete: 'CASCADE' })
@@ -253,9 +242,6 @@ export class SubAccount {
   
   @OneToMany(() => Ticket, (ticket) => ticket.subAccount)
   tickets: Ticket[];
-
-  @Index()
-  agencyIndex: string;
 }
 
 @Entity()
@@ -264,10 +250,10 @@ export class Tag {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: 'varchar'})
   name: string;
 
-  @Column()
+  @Column({type: "varchar"})
   color: string;
 
   @CreateDateColumn()
@@ -276,7 +262,7 @@ export class Tag {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
+  @Column({type: "varchar"})
   subAccountId: string;
 
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.tags, { onDelete: 'CASCADE' })
@@ -285,8 +271,6 @@ export class Tag {
   @OneToMany(() => Ticket, (ticket) => ticket.tags)
   tickets: Ticket[];
 
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -295,7 +279,7 @@ export class Pipeline {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
   @CreateDateColumn()
@@ -310,11 +294,8 @@ export class Pipeline {
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.pipelines, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
 
-  @Column()
+  @Column({type: "varchar"})
   subAccountId: string;
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -343,9 +324,6 @@ export class Lane {
 
   @Column({ default: 0 })
   order: number;
-
-  @Index()
-  pipelineIndex: string;
 }
 
 @Entity()
@@ -354,7 +332,7 @@ export class Ticket {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: 'varchar'})
   title: string;
 
   @Column('text')
@@ -369,8 +347,18 @@ export class Ticket {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
+  @Column({type: "varchar"})
   subAccountId: string;
+
+  @Column({type: "varchar"})
+  laneId: string;
+
+  @Column({type: "varchar"})
+  customerId: string;
+
+  @Column({type: "varchar"})
+  assignedUserId: string;
+
 
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.tickets, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
@@ -384,12 +372,6 @@ export class Ticket {
   @ManyToMany(() => Tag, (tag) => tag.tickets)
   @JoinTable()
   tags: Tag[];
-
-  @Index()
-  subAccountIndex: string;
-
-  @Index()
-  laneIndex: string;
 }
 
 @Entity()
@@ -400,7 +382,7 @@ export class Trigger {
   @Column({ type: 'enum', enum: TriggerTypes })
   type: TriggerTypes;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
   @Column('text')
@@ -420,9 +402,6 @@ export class Trigger {
 
   @OneToMany(() => Automation, (automation) => automation.trigger)
   automations: Automation[];
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -430,7 +409,7 @@ export class Automation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
   @Column('text')
@@ -445,13 +424,13 @@ export class Automation {
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.automations, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
 
-  @Column()
+  @Column({type: "varchar"})
   subAccountId: string;
 
   @ManyToOne(() => Trigger, (trigger) => trigger.automations, { onDelete: 'CASCADE' })
   trigger: Trigger;
 
-  @Column()
+  @Column({type: "varchar"})
   triggerId: string;
 
   @OneToMany(() => AutomationInstance, (instance) => instance.automation)
@@ -459,9 +438,6 @@ export class Automation {
 
   @OneToMany(() => Action, (action) => action.automation)
   actions: Action[];
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -478,11 +454,9 @@ export class AutomationInstance {
   @ManyToOne(() => Automation, (automation) => automation.instances, { onDelete: 'CASCADE' })
   automation: Automation;
 
-  @Column()
+  @Column({type: "varchar"})
   automationId: string;
 
-  @Index()
-  automationIndex: string;
 }
 
 @Entity()
@@ -505,11 +479,9 @@ export class Action {
   @ManyToOne(() => Automation, (automation) => automation.actions, { onDelete: 'CASCADE' })
   automation: Automation;
 
-  @Column()
+  @Column({type: "varchar"})
   automationId: string;
 
-  @Index()
-  automationIndex: string;
 }
 
 @Entity()
@@ -517,16 +489,16 @@ export class Contact {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   firstName: string;
 
-  @Column()
+  @Column({type: "varchar"})
   lastName: string;
 
-  @Column()
+  @Column({type: "varchar"})
   email: string;
 
-  @Column()
+  @Column({type: "varchar"})
   phone: string;
 
   @Column('text')
@@ -541,14 +513,11 @@ export class Contact {
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.contacts, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
 
-  @Column()
+  @Column({type: "varchar"})
   subAccountId: string;
 
   @OneToMany(() => Media, (media) => media.contact)
   media: Media[];
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -556,7 +525,7 @@ export class Media {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   title: string;
 
   @Column('text')
@@ -574,17 +543,14 @@ export class Media {
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.media, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
 
-  @Column()
+  @Column({type: "varchar"})
   subAccountId: string;
 
   @ManyToOne(() => Contact, (contact) => contact.media, { onDelete: 'CASCADE' })
   contact: Contact;
 
-  @Column()
+  @Column({type: "varchar"})
   contactId: string;
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -592,7 +558,7 @@ export class Funnel {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
   @CreateDateColumn()
@@ -609,9 +575,6 @@ export class Funnel {
 
   @Column()
   subAccountId: string;
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -619,10 +582,10 @@ export class FunnelPage {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   title: string;
 
-  @Column('text')
+  @Column({type: "text"})
   content: string;
 
   @CreateDateColumn()
@@ -636,9 +599,6 @@ export class FunnelPage {
 
   @Column()
   funnelId: string;
-
-  @Index()
-  funnelIndex: string;
 }
 
 @Entity()
@@ -663,9 +623,6 @@ export class AgencySidebarOption {
 
   @Column()
   agencyId: string;
-
-  @Index()
-  agencyIndex: string;
 }
 
 @Entity()
@@ -690,9 +647,6 @@ export class SubAccountSidebarOption {
 
   @Column()
   subAccountId: string;
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -700,7 +654,7 @@ export class Invitation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   email: string;
 
   @Column({ type: 'enum', enum: InvitationStatus })
@@ -709,17 +663,17 @@ export class Invitation {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column({type: "enum", enum: RoleEnum, default: RoleEnum.SUBACCOUNT_USER})
+  role: RoleEnum;
+
   @UpdateDateColumn()
   updatedAt: Date;
 
   @ManyToOne(() => Agency, (agency) => agency.invitations, { onDelete: 'CASCADE' })
   agency: Agency;
 
-  @Column()
+  @Column({type: "varchar"})
   agencyId: string;
-
-  @Index()
-  agencyIndex: string;
 }
 
 @Entity()
@@ -727,10 +681,10 @@ export class Notification {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "text"})
   message: string;
 
-  @Column()
+  @Column({type:"boolean"})
   isRead: boolean;
 
   @CreateDateColumn()
@@ -742,29 +696,20 @@ export class Notification {
   @ManyToOne(() => User, (user) => user.notifications, { onDelete: 'CASCADE' })
   user: User;
 
-  @Column()
+  @Column({type: "varchar"})
   userId: string;
 
   @ManyToOne(() => Agency, (agency) => agency.notifications, { onDelete: 'CASCADE' })
   agency: Agency;
 
-  @Column()
+  @Column({type: "varchar"})
   agencyId: string;
 
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.notifications, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
 
-  @Column()
+  @Column({type: "varchar", nullable: true})
   subAccountId: string;
-
-  @Index()
-  userIndex: string;
-
-  @Index()
-  agencyIndex: string;
-
-  @Index()
-  subAccountIndex: string;
 }
 
 @Entity()
@@ -772,7 +717,7 @@ export class Subscription {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "date"})
   subscriptionDate: Date;
 
   @Column({ type: 'enum', enum: Plan })
@@ -787,11 +732,8 @@ export class Subscription {
   @OneToOne(() => Agency, (agency) => agency.subscription)
   agency: Agency;
 
-  @Column()
+  @Column({type: "varchar"})
   agencyId: string;
-
-  @Index()
-  agencyIndex: string;
 }
 
 @Entity()
@@ -799,11 +741,11 @@ export class AddOns {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({type: "varchar"})
   name: string;
 
-  @Column()
-  price: number;
+  @Column({type: "varchar"})
+  price: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -814,9 +756,6 @@ export class AddOns {
   @ManyToOne(() => Agency, (agency) => agency.addOns, { onDelete: 'CASCADE' })
   agency: Agency;
 
-  @Column()
+  @Column({type: "varchar"})
   agencyId: string;
-
-  @Index()
-  agencyIndex: string;
 }
