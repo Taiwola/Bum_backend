@@ -24,7 +24,7 @@ export const registerUserController = async (req: Request, res: Response) => {
         if (invitationExist) {
             if (invitationExist.status === InvitationStatus.PENDING) {
                 const hashPwd = await bcrypt.hash(dataBody.password, 10);
-            const dataOption: UserInterface = {
+                const dataOption: UserInterface = {
                 ...dataBody,
                 password: hashPwd,
                 agencyId: invitationExist.agencyId,
@@ -40,7 +40,7 @@ export const registerUserController = async (req: Request, res: Response) => {
             // todo: create the sub account service and when a user is invited, the subaccount id or agency id should be added, if the user is meant to be an admin
             // update the notification db to add the user, agency and subaccout relation to the notitfication
 
-            await createNotification(message, agencyId, userId);
+            await createNotification(message, agencyId, userId, newUser, invitationExist.agency);
             await updateInvitation(invitationExist.id )
             return res.status(200).json({ message: 'Invited user joined' });
             } else if (invitationExist.status === InvitationStatus.ACCEPTED) {

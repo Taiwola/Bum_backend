@@ -1,16 +1,17 @@
 import { connectionSource } from "../database/database-source";
 import { Agency, Invitation } from "../database/entities/user.model";
-import { InvitationStatus } from "../enum/data.enum";
+import { InvitationStatus, RoleEnum } from "../enum/data.enum";
 
 
 const invitationRepo = connectionSource.getRepository(Invitation);
 
 
-export const createInvitation = async (email: string, agency: Agency, agencyId: string) => {
+export const createInvitation = async (email: string, agency: Agency, agencyId:string , role: RoleEnum) => {
     const invitation = invitationRepo.create({
         agency: agency,
         agencyId: agencyId,
         email: email,
+        role: role,
         status: InvitationStatus.PENDING,
         createdAt: Date.now(),
         updatedAt: Date.now()
