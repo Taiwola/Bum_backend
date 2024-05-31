@@ -6,8 +6,22 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 
 
+// declare global namespace
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id?: string 
+        email?: string
+      };
+    }
+  }
+}
+
 // import routes
 import {authRouter} from "./routes/auth.route";
+import { agencyRoute } from './routes/agency.route';
+import { userRouter } from './routes/user.route';
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
@@ -33,6 +47,8 @@ app.set('view engine', 'ejs');
 
 // use route
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/agency', agencyRoute);
 
 
 

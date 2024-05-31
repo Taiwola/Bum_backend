@@ -1,5 +1,6 @@
 import { connectionSource } from "../database/database-source";
 import { Agency, Invitation } from "../database/entities/user.model";
+import { InvitationStatus } from "../enum/data.enum";
 
 
 const invitationRepo = connectionSource.getRepository(Invitation);
@@ -10,6 +11,7 @@ export const createInvitation = async (email: string, agency: Agency, agencyId: 
         agency: agency,
         agencyId: agencyId,
         email: email,
+        status: InvitationStatus.PENDING,
         createdAt: Date.now(),
         updatedAt: Date.now()
     });
@@ -17,6 +19,11 @@ export const createInvitation = async (email: string, agency: Agency, agencyId: 
     await invitationRepo.save(invitation);
 
     return invitation;
+}
+
+export const updateInvitation = async (invitationId: string) => {
+    const invitations = await invitationRepo.update(invitationId, { status: InvitationStatus.ACCEPTED });
+    return invitations
 }
 
 export const verifyIfUserHasInvitation = async (email: string) => {

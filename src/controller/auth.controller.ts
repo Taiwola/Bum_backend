@@ -1,4 +1,4 @@
-import {create_user, get_one_by_email, verifyIfUserHasInvitation} from "../service";
+import {create_user, get_one_by_email, get_one_user, updateInvitation, verifyIfUserHasInvitation} from "../service";
 import * as bcrypt from "bcryptjs";
 import { Request, Response } from "express";
 import { generateJwt } from "../config/token";
@@ -7,6 +7,7 @@ import { UserInterface } from "../interfaces/user.interface";
 // import validator
 import {registerValidator, loginValidator} from "../util/validator/authValidator"
 import { createNotification } from "../service/notification.service";
+import { InvitationStatus } from "../enum/data.enum";
 
 
 export const registerUserController = async (req: Request, res: Response) => {
@@ -21,7 +22,8 @@ export const registerUserController = async (req: Request, res: Response) => {
 
         const invitationExist = await verifyIfUserHasInvitation(dataBody.email);
         if (invitationExist) {
-            const hashPwd = await bcrypt.hash(dataBody.password, 10);
+            if (invitationExist.status === InvitationStatus.PENDING) {
+                const hashPwd = await bcrypt.hash(dataBody.password, 10);
             const dataOption: UserInterface = {
                 ...dataBody,
                 password: hashPwd,
@@ -34,10 +36,16 @@ export const registerUserController = async (req: Request, res: Response) => {
 
             const message = `${newUser.name} joined`;
             const agencyId = invitationExist.agencyId;
-            const subAccountId = newUser.id;
+            const userId = newUser.id; // get the subaccount id instead of using the new userId
+            // todo: create the sub account service and when a user is invited, the subaccount id or agency id should be added, if the user is meant to be an admin
+            // update the notification db to add the user, agency and subaccout relation to the notitfication
 
-            await createNotification(message, agencyId, subAccountId);
+            await createNotification(message, agencyId, userId);
+            await updateInvitation(invitationExist.id )
             return res.status(200).json({ message: 'Invited user joined' });
+            } else if (invitationExist.status === InvitationStatus.ACCEPTED) {
+                return res.status(400).json({ message: 'Invited user already joined' });
+            } 
         }
 
         const userExist = await get_one_by_email(dataBody.email);
@@ -109,4 +117,13 @@ export const logUserOut = async (req:Request, res:Response) => {
     } else {
         return res.status(200).json({message:"logging you out...", });
     }
+}
+
+export const verifyUser = async (req: Request, res: Response) => {
+    const {id} = req.user;
+    const user = await get_one_user(id);
+    
+    if (!user) return null
+
+    return res.status(200).json({message: "user exist", data: user});
 }

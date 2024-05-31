@@ -138,23 +138,23 @@ export class Agency {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => SubAccount, (subAccount) => subAccount.agency)
+  @OneToMany(() => SubAccount, (subAccount) => subAccount.agency, { cascade: true, onDelete: 'CASCADE' })
   subAccounts: SubAccount[];
 
   @OneToMany(() => AgencySidebarOption, (sidebarOption) => sidebarOption.agency)
   sidebarOptions: AgencySidebarOption[];
 
-  @OneToMany(() => Invitation, (invitation) => invitation.agency)
+  @OneToMany(() => Invitation, (invitation) => invitation.agency, { cascade: true, onDelete: 'CASCADE' })
   invitations: Invitation[];
 
-  @OneToMany(() => Notification, (notification) => notification.agency)
+  @OneToMany(() => Notification, (notification) => notification.agency, { cascade: true, onDelete: 'CASCADE' })
   notifications: Notification[];
 
-  @OneToOne(() => Subscription, (subscription) => subscription.agency)
+  @OneToOne(() => Subscription, (subscription) => subscription.agency, { cascade: true, onDelete: 'CASCADE' })
   @JoinColumn()
   subscription: Subscription;
 
-  @OneToMany(() => AddOns, (addOns) => addOns.agency)
+  @OneToMany(() => AddOns, (addOns) => addOns.agency, { cascade: true, onDelete: 'CASCADE' })
   addOns: AddOns[];
 }
 
@@ -611,6 +611,9 @@ export class AgencySidebarOption {
 
   @Column({ type: 'enum', enum: Icon })
   icon: Icon;
+
+  @Column({type: 'varchar'})
+  link: string;
 
   @CreateDateColumn()
   createdAt: Date;
