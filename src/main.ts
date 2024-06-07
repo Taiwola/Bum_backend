@@ -22,6 +22,9 @@ declare global {
 import {authRouter} from "./routes/auth.route";
 import { agencyRoute } from './routes/agency.route';
 import { userRouter } from './routes/user.route';
+import { createRouteHandler } from 'uploadthing/express';
+import { uploadRouter } from './uploadthing/uploadthing';
+import { CloudUpload } from './routes/upload.route';
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
@@ -44,11 +47,23 @@ app.use(cookieParser());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
+app.use(
+  "/api/uploadthing",
+  createRouteHandler({
+    router: uploadRouter,
+    config: {
+       uploadthingSecret: process.env.UPLOADTHING_SECRET,
+       uploadthingId: process.env.UPLOADTHING_APP_ID,
+    },
+  }),
+);
+
 
 // use route
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/agency', agencyRoute);
+app.use('/api/upload', CloudUpload);
 
 
 

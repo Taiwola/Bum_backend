@@ -41,7 +41,7 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ type: 'enum', enum: RoleEnum, default: "" })
+  @Column({ type: 'enum', enum: RoleEnum, nullable: true})
   role: RoleEnum;
 
   @Column({type: 'varchar'})
@@ -666,7 +666,7 @@ export class Invitation {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column({type: "enum", enum: RoleEnum, default: ""})
+  @Column({type: "enum", enum: RoleEnum, nullable: true})
   role: RoleEnum;
 
   @UpdateDateColumn()

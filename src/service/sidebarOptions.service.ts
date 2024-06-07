@@ -8,8 +8,6 @@ const sidebarOptionRepo = connectionSource.getRepository(AgencySidebarOption);
 export const createSideBar = async (sideBarData: AgencySidebarOptionInterface) => {
     const sidebar  = sidebarOptionRepo.create({
         ...sideBarData,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
     });
 
     await sidebarOptionRepo.save(sidebar);
