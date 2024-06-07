@@ -8,6 +8,7 @@ import { UserInterface } from "../interfaces/user.interface";
 import {registerValidator, loginValidator} from "../util/validator/authValidator"
 import { createNotification } from "../service/notification.service";
 import { InvitationStatus } from "../enum/data.enum";
+import { NotifactionInterface } from "../interfaces/notification.interface";
 
 
 export const registerUserController = async (req: Request, res: Response) => {
@@ -40,7 +41,14 @@ export const registerUserController = async (req: Request, res: Response) => {
             // todo: create the sub account service and when a user is invited, the subaccount id or agency id should be added, if the user is meant to be an admin
             // update the notification db to add the user, agency and subaccout relation to the notitfication
 
-            await createNotification(message, agencyId, userId, newUser, invitationExist.agency);
+            const options: NotifactionInterface = {
+                message: `${newUser.name} joined`,
+                user: newUser,
+                userId: newUser.id,
+                agency: invitationExist.agency,
+                agencyId: invitationExist.agencyId
+            }
+            await createNotification(options);
             await updateInvitation(invitationExist.id )
             return res.status(200).json({ message: 'Invited user joined' });
             } else if (invitationExist.status === InvitationStatus.ACCEPTED) {

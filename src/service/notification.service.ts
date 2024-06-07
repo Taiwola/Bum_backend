@@ -1,16 +1,13 @@
 import { DeleteResult, UpdateResult } from "typeorm";
 import { connectionSource } from "../database/database-source";
-import { Agency, Notification, User } from "../database/entities/user.model";
+import { Agency, Notification, SubAccount, User } from "../database/entities/user.model";
+import { NotifactionInterface } from "../interfaces/notification.interface";
 
 const notificationRepo = connectionSource.getRepository(Notification);
 
-export const createNotification = async (message: string, agencyId: string, userId: string, user: User, agency:Agency): Promise<Notification> => {
+export const createNotification = async (notificationInterface:NotifactionInterface): Promise<Notification> => {
     const notification = notificationRepo.create({
-        message: message,
-        agencyId: agencyId,
-        userId: userId,
-        user: user,
-        agency: agency
+        ...notificationInterface
     });
 
     await notificationRepo.save(notification);
