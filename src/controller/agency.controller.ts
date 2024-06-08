@@ -74,12 +74,10 @@ export const create_agency = async (req: Request, res: Response) => {
               if (createdSidebars.length === sidebarArr.length) {
                 // once agency has been created change user role to owner of the agency
                 const options = {role: RoleEnum.AGENCY_OWNER, agency:agency, agencyId: agency.id }
-                console.log(createdSidebars);
                 await update_user(userExist.id, options);
-                await updateAgency(agency.id,{ sidebarOptions: createdSidebars});
                 return res.status(200).json({ message: "Agency and sidebar options created successfully", data: agency });
             } else {
-                return res.status(500).json({ message: "Not all sidebar options were created", data: agency });
+                return res.status(400).json({ message: "Not all sidebar options were created", data: agency });
             }
         }
     } catch (error) {

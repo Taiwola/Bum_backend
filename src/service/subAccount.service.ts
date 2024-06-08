@@ -42,6 +42,17 @@ export const getOneSubAccount = async (subAccountId: string): Promise<SubAccount
     return subAccount;
 };
 
+export const getSubAccountByName = async (subAccountName: string) => {
+    const subAccount = await subaccountRepo.findOne({
+        where: {
+            name: subAccountName
+        },
+        relations: ["agency", "sidebarOptions", "permissions", "funnels","media","contacts","triggers", "automations", "pipelines", "tags", "notifications", "tickets"]
+    });
+
+    return subAccount;
+}
+
 export const deleteSubAccount = async (subAccountId:string): Promise<DeleteResult> => {
     const subAccount = await subaccountRepo.delete(subAccountId);
     return subAccount;

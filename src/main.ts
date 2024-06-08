@@ -25,6 +25,8 @@ import { userRouter } from './routes/user.route';
 import { createRouteHandler } from 'uploadthing/express';
 import { uploadRouter } from './uploadthing/uploadthing';
 import { CloudUpload } from './routes/upload.route';
+import {notificationRouter} from "./routes/notification.route";
+import { subAccountRouter } from './routes/subaccount.route';
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
@@ -64,6 +66,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/agency', agencyRoute);
 app.use('/api/upload', CloudUpload);
+app.use('/api/notification', notificationRouter);
+app.use('/api/subaccount', subAccountRouter);
 
 
 
