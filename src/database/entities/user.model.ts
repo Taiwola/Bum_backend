@@ -687,7 +687,7 @@ export class Notification {
   @Column({type: "text"})
   message: string;
 
-  @Column({type:"boolean"})
+  @Column({type:"boolean", default: false})
   isRead: boolean;
 
   @CreateDateColumn()

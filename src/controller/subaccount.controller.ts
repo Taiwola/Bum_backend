@@ -1,9 +1,10 @@
 import {Request, Response} from "express";
 import { ISubAccount, SubAccountPartial } from "../interfaces/subAccount.interface";
-import { getAllSubAcccount, get_one_user, createSubAccount, createSubAccountSideBar, updateSubAccount, getOneSubAccount, deleteSubAccount } from "../service";
+import { getAllSubAcccount, get_one_user, createSubAccount, createSubAccountSideBar, updateSubAccount, getOneSubAccount, deleteSubAccount, createNotification } from "../service";
 import { getSubAccountByName } from "../service/subAccount.service";
 import { SubaccountSidebarOptionInterface } from "../interfaces/subaccountSidebar.interface";
 import { Icon } from "../enum/data.enum";
+import { NotifactionInterface } from "../interfaces/notification.interface";
 
 
 export const create_subaccount = async (req: Request, res: Response) => {
@@ -22,8 +23,12 @@ export const create_subaccount = async (req: Request, res: Response) => {
     return res.status(400).json({message: "Subaccount already exists!"});
   }
 
+  const options = {
+    ...dataBody, agency:userExist.agency, agencyId: userExist.agencyId
+  }
+
   try {
-    const subAccount = await createSubAccount(dataBody);
+    const subAccount = await createSubAccount(options);
 
     if (subAccount) {
         const sideBarArr: SubaccountSidebarOptionInterface[] = [
@@ -93,6 +98,16 @@ export const create_subaccount = async (req: Request, res: Response) => {
         }
 
         if (createdSideBar.length === sideBarArr.length) {
+            const notificationOptions: NotifactionInterface = {
+                message: `${subAccount.name} created`,
+                user: userExist,
+                userId: userExist.id,
+                agency: userExist.agency,
+                agencyId: userExist.agency.id,
+                subAccount: subAccount,
+                subAccountId: subAccount.id
+            }
+            await createNotification(notificationOptions);
             return res.status(200).json({ message: "Sub account and sidebar options created successfully", data: subAccount });
         } else {
             return res.status(400).json({message: "not all side bar option were created", data: subAccount})
