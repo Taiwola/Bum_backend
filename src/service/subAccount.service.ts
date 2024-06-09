@@ -27,7 +27,7 @@ export const updateSubAccount = async (subAccountId: string, updateSubAccountDat
 
 export const getAllSubAcccount = async (): Promise<SubAccount[]> => {
     const subAccounts = await subaccountRepo.find({
-        relations: ["agency", "sidebarOptions", "permissions", "funnels","media","contacts","triggers", "automations", "pipelines", "tags", "notifications", "tickets"]
+        relations: ["agency", "sidebarOptions", "permissions", "funnels","media","contacts","triggers", "automations", "pipelines", "tags", "notifications", "tickets", 'permissions.subAccount']
     });
     return subAccounts;
 }
@@ -37,7 +37,7 @@ export const getOneSubAccount = async (subAccountId: string): Promise<SubAccount
         where: {
             id: subAccountId
         },
-        relations: ["agency", "sidebarOptions", "permissions", "funnels","media","contacts","triggers", "automations", "pipelines", "tags", "notifications", "tickets"]
+        relations: ["agency", "sidebarOptions", "permissions", "funnels","media","contacts","triggers", "automations", "pipelines", "tags", "notifications", "tickets", 'permissions.subAccount']
     });
     return subAccount;
 };
