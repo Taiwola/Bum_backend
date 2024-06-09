@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { create_user, get_all_user, get_one_user, get_one_by_email, update_user, delete_user } from '../service';
+import { create_user, get_all_user, get_one_user, get_one_by_email, update_user, delete_user, getAgencyById, get_team_members } from '../service';
 import { UserInterface, UserPartialInterface } from '../interfaces/user.interface';
 
 // Create a new user
@@ -60,6 +60,29 @@ export const getOneByEmail = async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+export const getTeamMembers = async (req: Request, res: Response) => {
+    const Id = req.params.Id;
+    
+
+    try {
+        // check if agency exist
+    const agencyExist = await getAgencyById(Id);
+
+    if (!agencyExist) {
+        return res.status(404).json({message: "Agency not found"});
+    };
+
+    const teamMembers = await get_team_members(Id);
+
+    return res.status(200).json({message: "Request successful", data: teamMembers})
+    } catch (error) {
+        console.error("Error fetching team members:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+
+    
+}
 
 // Update a user
 export const updateUser = async (req: Request, res: Response) => {
