@@ -32,8 +32,8 @@ export const create_subaccount = async (req: Request, res: Response) => {
     const subAccount = await createSubAccount(options);
     const permisssionOptions:PermissionsInterface = {
       email: userExist.email,
-      subAccount: subAccountExist,
-      subAccountId: subAccountExist.id,
+      subAccount: subAccount,
+      subAccountId: subAccount.id,
       access: true,
       user: userExist
     }
