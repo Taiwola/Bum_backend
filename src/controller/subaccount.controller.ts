@@ -1,10 +1,11 @@
 import {Request, Response} from "express";
 import { ISubAccount, SubAccountPartial } from "../interfaces/subAccount.interface";
-import { getAllSubAcccount, get_one_user, createSubAccount, createSubAccountSideBar, updateSubAccount, getOneSubAccount, deleteSubAccount, createNotification } from "../service";
+import { getAllSubAcccount, get_one_user, createSubAccount, createSubAccountSideBar, updateSubAccount, getOneSubAccount, deleteSubAccount, createNotification, create_permission } from "../service";
 import { getSubAccountByName } from "../service/subAccount.service";
 import { SubaccountSidebarOptionInterface } from "../interfaces/subaccountSidebar.interface";
 import { Icon } from "../enum/data.enum";
 import { NotifactionInterface } from "../interfaces/notification.interface";
+import { PermissionsInterface } from "../interfaces/permission.interface";
 
 
 export const create_subaccount = async (req: Request, res: Response) => {
@@ -29,6 +30,13 @@ export const create_subaccount = async (req: Request, res: Response) => {
 
   try {
     const subAccount = await createSubAccount(options);
+    const permisssionOptions:PermissionsInterface = {
+      email: userExist.email,
+      subAccount: subAccountExist,
+      subAccountId: subAccountExist.id,
+      access: true,
+      user: userExist
+    }
 
     if (subAccount) {
         const sideBarArr: SubaccountSidebarOptionInterface[] = [
@@ -108,6 +116,7 @@ export const create_subaccount = async (req: Request, res: Response) => {
                 subAccountId: subAccount.id
             }
             await createNotification(notificationOptions);
+            await create_permission(permisssionOptions)
             return res.status(200).json({ message: "Sub account and sidebar options created successfully", data: subAccount });
         } else {
             return res.status(400).json({message: "not all side bar option were created", data: subAccount})
