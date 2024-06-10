@@ -20,28 +20,28 @@ export const create_user = async (userInput: UserInterface): Promise<User> => {
 export const get_all_user = async (): Promise<User[]> => {
     const users = await userRepository.find({
         relations: [
-            'agency', 'permissions', 'tickets', 'notifications','agency.subAccounts', 'permissions.subAccount'
+            'agency', 'permissions', 'tickets', 'notifications','agency.subAccounts', 'permissions.subAccount', 'agency.subAccounts.permissions'
         ]
     });
     return users;
 }
 
 export const get_one_user = async (userId: string): Promise<User> => {
-    const user = await userRepository.findOne({ where: {id: userId}, relations: ['agency', 'permissions', 'tickets', 'notifications','agency.subAccounts', 'permissions.subAccount'] });
+    const user = await userRepository.findOne({ where: {id: userId}, relations: ['agency', 'permissions', 'tickets', 'notifications','agency.subAccounts', 'permissions.subAccount', 'agency.subAccounts.permissions'] });
     return user;
 };
 
 export const get_team_members = async (agencyId: string) => {
     const user = await userRepository.find({
         where: {agencyId: agencyId},
-        relations: ['agency', 'permissions', 'tickets', 'notifications', 'agency.subAccounts', 'permissions.subAccount']
+        relations: ['agency', 'permissions', 'tickets', 'notifications', 'agency.subAccounts', 'permissions.subAccount', 'agency.subAccounts.permissions']
     })
     return user;
 }
 
 
 export const get_one_by_email = async (userEmail: string): Promise<User> => {
-    const user = await userRepository.findOne({ where: {email: userEmail}, relations: ['agency', 'permissions', 'tickets', 'notifications'] });
+    const user = await userRepository.findOne({ where: {email: userEmail}, relations: ['agency', 'permissions', 'tickets', 'notifications', 'agency.subAccounts.permissions'] });
     return user;
 }
 
