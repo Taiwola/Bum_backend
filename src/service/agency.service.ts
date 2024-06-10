@@ -15,19 +15,19 @@ export const createAgency = async (agencyData: AgencyInterface) => {
 
 export const getAllAgency = async () => {
     return await agencyRepo.find({
-        relations: ['users', 'subAccounts', 'sidebarOptions', 'invitations', 'notifications', 'subscription', 'addOns']
+        relations: ['users', 'subAccounts', 'sidebarOptions', 'invitations', 'notifications', 'subscription', 'addOns', 'subAccounts.permissions', 'subAccounts.agency', 'subAccounts.sidebarOptions', 'subAccounts.funnels', 'subAccounts.media', 'subAccounts.contacts', 'subAccounts.triggers', 'subAccounts.automations', 'subAccounts.pipelines', 'subAccounts.tags', 'subAccounts.notifications', 'subAccounts.tickets']
     });
 };
 
 export const getAgencyById = async (agencyId: string) => {
-    const agency = await agencyRepo.findOne({where: {id: agencyId}, relations:  ['users', 'subAccounts', 'sidebarOptions', 'invitations', 'notifications', 'subscription', 'addOns']});
+    const agency = await agencyRepo.findOne({where: {id: agencyId}, relations: ['users', 'subAccounts', 'sidebarOptions', 'invitations', 'notifications', 'subscription', 'addOns', 'subAccounts.permissions', 'subAccounts.agency', 'subAccounts.sidebarOptions', 'subAccounts.funnels', 'subAccounts.media', 'subAccounts.contacts', 'subAccounts.triggers', 'subAccounts.automations', 'subAccounts.pipelines', 'subAccounts.tags', 'subAccounts.notifications', 'subAccounts.tickets']});
 
     return agency;
 };
 
 
 export const getAgencyByName = async (name: string) => {
-        const agency = await agencyRepo.findOne({where: {name: name}, relations:  ['users', 'subAccounts', 'sidebarOptions', 'invitations', 'notifications', 'subscription', 'addOns']});
+        const agency = await agencyRepo.findOne({where: {name: name},  relations: ['users', 'subAccounts', 'sidebarOptions', 'invitations', 'notifications', 'subscription', 'addOns', 'subAccounts.permissions', 'subAccounts.agency', 'subAccounts.sidebarOptions', 'subAccounts.funnels', 'subAccounts.media', 'subAccounts.contacts', 'subAccounts.triggers', 'subAccounts.automations', 'subAccounts.pipelines', 'subAccounts.tags', 'subAccounts.notifications', 'subAccounts.tickets']});
         return agency;
 }
 

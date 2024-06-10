@@ -27,17 +27,20 @@ import { uploadRouter } from './uploadthing/uploadthing';
 import { CloudUpload } from './routes/upload.route';
 import {notificationRouter} from "./routes/notification.route";
 import { subAccountRouter } from './routes/subaccount.route';
+import { permissionRoute } from './routes/permission.route';
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
 
+const corsOptions = {
+  origin: 'http://localhost:5173', // Replace with your frontend origin
+  credentials: true, // This allows cookies and other credentials to be sent
+};
 
 // middleware setup
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors({
-    origin: '*'
-}));
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(session({
   secret: process.env.SESSION_SECRET as string,
@@ -68,6 +71,7 @@ app.use('/api/agency', agencyRoute);
 app.use('/api/upload', CloudUpload);
 app.use('/api/notification', notificationRouter);
 app.use('/api/subaccount', subAccountRouter);
+app.use('/api/permissions', permissionRoute);
 
 
 
