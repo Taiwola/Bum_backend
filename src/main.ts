@@ -1,3 +1,4 @@
+import {config} from "dotenv";
 import express from 'express';
 import {connect} from "./database/database-source";
 import cors from 'cors';
@@ -6,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 
 
+config();
 // declare global namespace
 declare global {
   namespace Express {
@@ -29,6 +31,8 @@ import {notificationRouter} from "./routes/notification.route";
 import { subAccountRouter } from './routes/subaccount.route';
 import { permissionRoute } from './routes/permission.route';
 import {invitationRoute} from "./routes/invitation.route";
+import {mediaRouter} from "./routes/media.route";
+
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
@@ -74,7 +78,7 @@ app.use('/api/notification', notificationRouter);
 app.use('/api/subaccount', subAccountRouter);
 app.use('/api/permissions', permissionRoute);
 app.use("/api/invitation", invitationRoute);
-
+app.use('/api/media', mediaRouter);
 
 
 async function startServer() {

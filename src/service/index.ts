@@ -7,3 +7,4 @@ export * from "./subaccount.sidebar.service";
 export * from "./subAccount.service";
 export * from "./invitation.service";
 export * from "./permission.service";
+export * from "./media.service";
