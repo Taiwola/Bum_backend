@@ -13,8 +13,6 @@ export const createInvitation = async (email: string, agency: Agency, agencyId:s
         email: email,
         role: role,
         status: InvitationStatus.PENDING,
-        createdAt: Date.now(),
-        updatedAt: Date.now()
     });
 
     await invitationRepo.save(invitation);

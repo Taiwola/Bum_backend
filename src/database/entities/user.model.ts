@@ -639,6 +639,9 @@ export class SubAccountSidebarOption {
   @Column({ type: 'enum', enum: Icon })
   icon: Icon;
 
+  @Column({type: 'varchar', nullable: true})
+  link: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

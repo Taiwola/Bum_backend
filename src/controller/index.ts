@@ -4,3 +4,4 @@ export * from "./user.controller";
 export * from "./notifcation.controller";
 export * from "./subaccount.controller";
 export * from "./permission.controller";
+export * from "./invitations.controller";

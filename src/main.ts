@@ -28,6 +28,7 @@ import { CloudUpload } from './routes/upload.route';
 import {notificationRouter} from "./routes/notification.route";
 import { subAccountRouter } from './routes/subaccount.route';
 import { permissionRoute } from './routes/permission.route';
+import {invitationRoute} from "./routes/invitation.route";
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
@@ -72,6 +73,7 @@ app.use('/api/upload', CloudUpload);
 app.use('/api/notification', notificationRouter);
 app.use('/api/subaccount', subAccountRouter);
 app.use('/api/permissions', permissionRoute);
+app.use("/api/invitation", invitationRoute);
 
 
 
