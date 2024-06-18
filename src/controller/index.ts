@@ -6,3 +6,4 @@ export * from "./subaccount.controller";
 export * from "./permission.controller";
 export * from "./invitations.controller";
 export * from "./media.controller";
+export * from "./pipeline.controller";

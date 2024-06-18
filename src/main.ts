@@ -32,6 +32,7 @@ import { subAccountRouter } from './routes/subaccount.route';
 import { permissionRoute } from './routes/permission.route';
 import {invitationRoute} from "./routes/invitation.route";
 import {mediaRouter} from "./routes/media.route";
+import {pipelineRouter} from "./routes/pipeline.route";
 
 
 const PORT  =  process.env.PORT || 4000;
@@ -79,6 +80,7 @@ app.use('/api/subaccount', subAccountRouter);
 app.use('/api/permissions', permissionRoute);
 app.use("/api/invitation", invitationRoute);
 app.use('/api/media', mediaRouter);
+app.use('/api/pipeline', pipelineRouter);
 
 
 async function startServer() {

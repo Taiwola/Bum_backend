@@ -8,3 +8,4 @@ export * from "./subAccount.service";
 export * from "./invitation.service";
 export * from "./permission.service";
 export * from "./media.service";
+export * from "./pipelines.service";
