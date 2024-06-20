@@ -33,7 +33,8 @@ import { permissionRoute } from './routes/permission.route';
 import {invitationRoute} from "./routes/invitation.route";
 import {mediaRouter} from "./routes/media.route";
 import {pipelineRouter} from "./routes/pipeline.route";
-
+import {ticketRouter} from "./routes/ticket.route";
+import {lanesRouter} from "./routes/lanes.route";
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
@@ -81,6 +82,8 @@ app.use('/api/permissions', permissionRoute);
 app.use("/api/invitation", invitationRoute);
 app.use('/api/media', mediaRouter);
 app.use('/api/pipeline', pipelineRouter);
+app.use('/api/lane', lanesRouter);
+app.use('/api/ticket', ticketRouter);
 
 
 async function startServer() {

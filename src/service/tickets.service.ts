@@ -26,7 +26,17 @@ export const update_ticket = async (ticketId: string ,ticketDetails: TicketInter
 
 
 export const get_all_ticket = async () => {
-    const tickets = await ticketRepository.find();
+    const tickets = await ticketRepository.find({
+        order: {createdAt: 'ASC'}
+    });
+    return tickets;
+}
+
+export const get_all_ticket_where_laneId = async (laneId:string) => {
+    const tickets = await ticketRepository.find({
+        where: {laneId: laneId},
+        order: {createdAt: 'ASC'}
+    });
     return tickets;
 }
 
