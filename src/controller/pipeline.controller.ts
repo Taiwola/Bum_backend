@@ -7,6 +7,7 @@ export const createPipeline = async (req: Request, res: Response) => {
     try {
         const dataBody:PipelineInterface = req.body;
 
+
         const subAccountExist = await getOneSubAccount(dataBody.subAccountId);
 
         if (!subAccountExist) {

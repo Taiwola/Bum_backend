@@ -85,6 +85,8 @@ export const create_notification = async (req: Request, res: Response) => {
                     message: message,
                     user: userExist,
                     userId: userExist.id,
+                    agency: agencyExist,
+                    agencyId: agencyExist.id,
                     subAccount: subAccount,
                     subAccountId: subAccount.id
                }
