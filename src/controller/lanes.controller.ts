@@ -8,7 +8,22 @@ export const createLanes = async (req: Request, res: Response) => {
     try {
         const pipeline = await get_one_pipelines(dataBody.pipelineId);
         if (!pipeline) return res.status(404).json({message: "Pipeline does not exist"});
-        const lane = await create_lane(dataBody);
+
+        let order: number
+
+        if (!dataBody.order) {
+            order = (await get_all_lane()).length;
+        } else {
+            order = dataBody.order
+        }
+
+        const options: LaneInterface = {
+            ...dataBody,
+            order: order
+        }
+
+
+        const lane = await create_lane(options);
         return res.status(200).json({message: "Lane was created", data:lane});
     } catch (error) {
         console.log(error);
@@ -24,6 +39,8 @@ export const updateLanes = async (req: Request, res: Response) => {
         if (!lanes) return res.status(404).json({message: "Lane does not exist"});
         const pipeline = await get_one_pipelines(dataBody.pipelineId);
         if (!pipeline) return res.status(404).json({message: "Pipeline does not exist"});
+
+       
         // update lane logic
         const update =await update_lane(lanes.id, dataBody);
         return res.status(200).json({message: "Lanes updated", data:update});

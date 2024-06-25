@@ -43,7 +43,8 @@ export const get_one_lane = async (laneId: string) => {
 export const get_lane_where_pipelineId = async (pipelineId: string) => {
     const lanes = await laneRepository.find({
         where: {pipelineId: pipelineId},
-        relations: ['pipeline', 'tickets', 'tickets.assignedUser', 'tickets.tags']
+        relations: ['pipeline', 'tickets', 'tickets.assignedUser', 'tickets.tags'],
+        order: {order: "ASC"}
     });
 
     return lanes;

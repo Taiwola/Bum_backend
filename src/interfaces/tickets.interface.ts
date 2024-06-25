@@ -1,17 +1,19 @@
-import { Lane, SubAccount, Tag, User } from "../database/entities/user.model";
+import { Contact, Lane, SubAccount, Tag, User } from "../database/entities/user.model";
 
 export interface TicketInterface {
-    title: string,
+    name: string,
     description: string,
     isClosed: boolean,
     subAccountId: string;
     laneId: string;
     customerId: string;
+    value: number;
     assignedUserId: string;
     subAccount: SubAccount;
     assignedUser: User;
     lane: Lane;
     tags: Tag[];
+    contact: Contact
 }
 
 export interface TicketInterfacePartial extends Partial<TicketInterface> {}

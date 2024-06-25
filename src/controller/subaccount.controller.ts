@@ -35,7 +35,8 @@ export const create_subaccount = async (req: Request, res: Response) => {
       subAccount: subAccount,
       subAccountId: subAccount.id,
       access: true,
-      user: userExist
+      user: userExist,
+      userId: userExist.id
     }
 
     if (subAccount) {

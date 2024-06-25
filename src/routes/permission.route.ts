@@ -4,7 +4,8 @@ import {
     updatePermission,
     getAllPermission,
     getOnePermission,
-    deletePermission
+    deletePermission,
+    getAllUserPermission
 } from '../controller';
 import { authentication } from '../middleware/authentication';
 
@@ -21,6 +22,8 @@ router.get('/',authentication, getAllPermission);
 
 // Route to get a single permission by ID
 router.get('/:id',authentication, getOnePermission);
+
+router.get('/user/:Id', authentication, getAllUserPermission);
 
 // Route to delete a permission by ID
 router.delete('/:id',authentication, deletePermission);

@@ -1,7 +1,7 @@
 import {Request, Response, json} from "express";
 import { TicketInterface, TicketInterfacePartial } from "../interfaces/tickets.interface";
-import { getOneSubAccount, get_one_lane, get_one_user } from "../service";
-import { create_ticket, delete_ticket, get_all_ticket, get_all_ticket_where_laneId, get_one_ticket, update_ticket } from "../service/tickets.service";
+import { getOneSubAccount, get_one_lane, get_one_pipelines, get_one_user } from "../service";
+import { create_ticket, delete_ticket, get_all_ticket, get_all_ticket_where_laneId, get_all_tickets_where_pipelineId, get_one_ticket, update_ticket } from "../service/tickets.service";
 
 
 export const createTicket = async (req: Request, res: Response) => {
@@ -58,6 +58,18 @@ export const getAllTicketWhereLaneId = async (req:Request, res:Response) => {
     const tickets = await get_all_ticket_where_laneId(laneExist.id);
 
     return res.status(200).json({message:"Request successfull", data:tickets});
+}
+
+export const getAllTicketsWherePipelineId = async (req:Request, res:Response) => {
+    const {Id} = req.params;
+
+    const pipeline = await get_one_pipelines(Id);
+
+    if (!pipeline) return res.status(404).json({message: 'pipeline does not exist'});
+
+    const tickets = await get_all_tickets_where_pipelineId(Id)
+
+    return res.status(200).json({message: "Request was succesful", data: tickets});
 }
 
 export const getOneTicket = async (req: Request, res: Response) => {

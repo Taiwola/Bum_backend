@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PartialInterfacePermission, PermissionsInterface } from "../interfaces/permission.interface";
-import { create_permission, delete_permission, get_all_permission, get_one_permission, get_one_user, getOneSubAccount, update_permission } from "../service";
+import { create_permission, delete_permission, get_all_permission, get_all_user_permission, get_one_permission, get_one_user, getOneSubAccount, update_permission } from "../service";
 
 interface CustomRequest extends Request {
     user?: { id: string };
@@ -8,7 +8,7 @@ interface CustomRequest extends Request {
 
 export const createPermission = async (req: CustomRequest, res: Response) => {
     const dataBody: PermissionsInterface = req.body;
-    const userId = req.user?.id;
+    const userId = dataBody.userId;
 
     if (!userId) {
         return res.status(400).json({ message: "User ID is missing" });
@@ -30,7 +30,8 @@ export const createPermission = async (req: CustomRequest, res: Response) => {
             access: dataBody.access,
             subAccountId: dataBody.subAccountId,
             user: userExist,
-            subAccount: subAccountExist
+            subAccount: subAccountExist, 
+            userId: userExist.id
         };
 
         const permission = await create_permission(options);
@@ -62,6 +63,23 @@ export const updatePermission = async (req: CustomRequest, res: Response) => {
 export const getAllPermission = async (req: CustomRequest, res: Response) => {
     try {
         const permissions = await get_all_permission();
+        return res.status(200).json({ message: "Request successful", data: permissions });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+export const getAllUserPermission = async (req: CustomRequest, res: Response) => {
+    try {
+        const userId = req.params.Id;
+        const userExist  = await get_one_user(userId);
+
+        if (!userExist) return res.status(404).json({message: 'user does not exist'})
+        const permissions = await get_all_user_permission(userExist);
+        if (!permissions) {
+            return res.status(404).json({ message: "Permission does not exist" });
+        }
         return res.status(200).json({ message: "Request successful", data: permissions });
     } catch (error) {
         console.error(error);

@@ -5,7 +5,8 @@ export interface PermissionsInterface {
     user: User,
     subAccountId: string,
     subAccount: SubAccount,
-    access: boolean
+    access: boolean,
+    userId: string
 }
 
 export interface PartialInterfacePermission extends Partial<PermissionsInterface> {}

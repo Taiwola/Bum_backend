@@ -8,6 +8,6 @@ export interface LaneInterface {
 }
 
 export interface LaneInterfacePartial extends Partial<LaneInterface> {
-    id: string,
+    id?: string,
     tickets?: Ticket[]
 }

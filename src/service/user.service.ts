@@ -39,6 +39,15 @@ export const get_team_members = async (agencyId: string) => {
     return user;
 }
 
+export const get_subacc_team_members = async (subaccId: string) => {
+    const user = await userRepository.find({
+        where: {agency: {
+            subAccounts: {id: subaccId}
+        }},
+        relations: ['agency', 'permissions', 'tickets', 'notifications', 'agency.subAccounts', 'permissions.subAccount', 'agency.subAccounts.permissions', 'agency.subAccounts.sidebarOptions']
+    })
+    return user;
+}
 
 export const get_one_by_email = async (userEmail: string): Promise<User> => {
     const user = await userRepository.findOne({ where: {email: userEmail}, relations: ['agency', 'permissions', 'tickets', 'notifications', 'agency.subAccounts.permissions', 'agency.subAccounts.sidebarOptions'] });

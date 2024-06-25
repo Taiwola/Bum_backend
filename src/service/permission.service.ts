@@ -1,5 +1,5 @@
 import { connectionSource } from "../database/database-source";
-import { Permissions } from "../database/entities/user.model";
+import { Permissions, User } from "../database/entities/user.model";
 import { PartialInterfacePermission, PermissionsInterface } from "../interfaces/permission.interface";
 
 
@@ -25,6 +25,17 @@ export const update_permission = async (perId: string, perData: PartialInterface
 
 export const get_all_permission = async () => {
     const permission = await permissionRepo.find({
+        relations: [
+            'user', 'subAccount', 'subAccount.agency'
+        ]
+    })
+
+    return permission;
+}
+
+export const get_all_user_permission = async (user: User) => {
+    const permission = await permissionRepo.findOne({
+        where: {user: user},
         relations: [
             'user', 'subAccount', 'subAccount.agency'
         ]

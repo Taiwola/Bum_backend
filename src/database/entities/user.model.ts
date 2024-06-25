@@ -333,7 +333,10 @@ export class Ticket {
   id: string;
 
   @Column({type: 'varchar'})
-  title: string;
+  name: string;
+
+  @Column({type: "decimal"})
+  value: number;
 
   @Column('text')
   description: string;
@@ -368,6 +371,9 @@ export class Ticket {
 
   @ManyToOne(() => Lane, (lane) => lane.tickets, { onDelete: 'CASCADE' })
   lane: Lane;
+
+  @ManyToOne(() => Contact, (contact) => contact.tickets, { onDelete: 'SET NULL' })
+  contact: Contact;
 
   @ManyToMany(() => Tag, (tag) => tag.tickets)
   @JoinTable()
@@ -518,6 +524,9 @@ export class Contact {
 
   @OneToMany(() => Media, (media) => media.contact)
   media: Media[];
+
+  @OneToMany(() => Ticket, (ticket) => ticket.contact)
+  tickets: Ticket[];
 }
 
 @Entity()

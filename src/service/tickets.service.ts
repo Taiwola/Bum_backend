@@ -27,7 +27,8 @@ export const update_ticket = async (ticketId: string ,ticketDetails: TicketInter
 
 export const get_all_ticket = async () => {
     const tickets = await ticketRepository.find({
-        order: {createdAt: 'ASC'}
+        order: {createdAt: 'ASC'},
+        relations: ['tags', 'lane', 'assignedUser', 'subAccount']
     });
     return tickets;
 }
@@ -35,8 +36,18 @@ export const get_all_ticket = async () => {
 export const get_all_ticket_where_laneId = async (laneId:string) => {
     const tickets = await ticketRepository.find({
         where: {laneId: laneId},
+        relations: ['tags', 'lane', 'assignedUser', 'subAccount'],
         order: {createdAt: 'ASC'}
     });
+    return tickets;
+}
+
+export const get_all_tickets_where_pipelineId = async (pipelineId: string) => {
+    const tickets = await ticketRepository.find({
+        where: {lane: {pipelineId: pipelineId}},
+        relations: ['tags', 'lane', 'assignedUser', 'subAccount']
+    })
+
     return tickets;
 }
 
