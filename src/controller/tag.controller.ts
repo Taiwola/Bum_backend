@@ -78,6 +78,7 @@ export const getOneTag = async (req: Request, res: Response) => {
 }
 
 export const deleteTag = async (req: Request, res: Response) => {
+
     const Id = req.params.Id;
 
     const tag = await get_one_tag(Id);

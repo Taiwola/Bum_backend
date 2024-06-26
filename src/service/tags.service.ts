@@ -33,7 +33,7 @@ export const get_all_tags = async () => {
 
 
 export const get_all_subaccount_tags = async (subaccId: string) => {
-    const tag = await TagRepository.findOne({
+    const tag = await TagRepository.find({
         where: {subAccountId: subaccId},
         relations: ['subAccount', 'tickets']
     });

@@ -1,7 +1,6 @@
 import express from "express";
 import { authentication } from "../middleware/authentication";
-import { createTag, getAllTag, getOneTag, getTagsWhereSubAcct, updateTag } from "../controller";
-import { delete_tag } from "../service";
+import { createTag, deleteTag, getAllTag, getOneTag, getTagsWhereSubAcct, updateTag } from "../controller";
 
 
 const router = express.Router();
@@ -14,7 +13,7 @@ router.post('/', authentication, createTag);
 
 router.patch("/:Id", authentication, updateTag);
 
-router.delete("/:Id", authentication, delete_tag);
+router.delete("/:Id", authentication, deleteTag);
 
 
 
