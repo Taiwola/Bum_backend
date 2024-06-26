@@ -268,7 +268,7 @@ export class Tag {
   @ManyToOne(() => SubAccount, (subAccount) => subAccount.tags, { onDelete: 'CASCADE' })
   subAccount: SubAccount;
 
-  @OneToMany(() => Ticket, (ticket) => ticket.tags)
+  @ManyToMany(() => Ticket, ticket => ticket.tags)
   tickets: Ticket[];
 
 }
