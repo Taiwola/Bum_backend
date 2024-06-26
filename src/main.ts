@@ -35,6 +35,7 @@ import {mediaRouter} from "./routes/media.route";
 import {pipelineRouter} from "./routes/pipeline.route";
 import {ticketRouter} from "./routes/ticket.route";
 import {lanesRouter} from "./routes/lanes.route";
+import {tagRouter} from "./routes/tag.route";
 
 const PORT  =  process.env.PORT || 4000;
 const app = express();
@@ -84,6 +85,7 @@ app.use('/api/media', mediaRouter);
 app.use('/api/pipeline', pipelineRouter);
 app.use('/api/lane', lanesRouter);
 app.use('/api/ticket', ticketRouter);
+app.use('/api/tag', tagRouter);
 
 
 async function startServer() {
