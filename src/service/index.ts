@@ -10,3 +10,4 @@ export * from "./permission.service";
 export * from "./media.service";
 export * from "./pipelines.service";
 export * from './lanes.service';
+export * from "./tags.service";
