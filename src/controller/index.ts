@@ -9,3 +9,4 @@ export * from "./media.controller";
 export * from "./pipeline.controller";
 export * from "./lanes.controller";
 export * from "./ticket.controller";
+export * from "./tag.controller";
