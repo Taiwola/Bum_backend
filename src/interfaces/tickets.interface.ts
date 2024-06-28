@@ -13,7 +13,8 @@ export interface TicketInterface {
     assignedUser: User;
     lane: Lane;
     tags: Tag[];
-    contact: Contact
+    contact: Contact;
+    order: number
 }
 
 export interface TicketInterfacePartial extends Partial<TicketInterface> {}

@@ -353,10 +353,13 @@ export class Ticket {
   @Column({type: "varchar"})
   subAccountId: string;
 
-  @Column({type: "varchar"})
+  @Column({type: "number", default:0})
+  order: number
+
+  @Column({type: "varchar", nullable: true})
   laneId: string;
 
-  @Column({type: "varchar"})
+  @Column({type: "varchar", nullable: true})
   customerId: string;
 
   @Column({type: "varchar"})

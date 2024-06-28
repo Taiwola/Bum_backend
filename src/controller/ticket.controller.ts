@@ -10,13 +10,21 @@ export const createTicket = async (req: Request, res: Response) => {
     const laneExist = await get_one_lane(dataBody.laneId);
     const userExist = await get_one_user(dataBody.assignedUserId);
     const subAccountExist = await getOneSubAccount(dataBody.subAccountId);
+    
 
-    if (!laneExist || userExist || subAccountExist) {
+    if (!laneExist || !userExist || !subAccountExist) {
         return res.status(404).json({message: "Some request were not found"})
     }
 
+
     try {
-        const create = await create_ticket(dataBody);
+        const opt: TicketInterface  = {
+            ...dataBody,
+            subAccount: subAccountExist,
+            assignedUser: userExist,
+            lane: laneExist
+        }
+        const create = await create_ticket(opt);
 
         return res.status(200).json({message: "Ticket created", data: create});
     } catch (error) {
